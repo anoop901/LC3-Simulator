@@ -62,7 +62,7 @@ public class MemoryTableModel implements TableModel {
 		} else if (columnIndex == 2) {
 			return Helper.shortToHexString(lc3.getMem((short) rowIndex));
 		} else if (columnIndex == 3) {
-			return "[instruction]";
+			return Helper.shortToInstruction(lc3.getMem((short) rowIndex), (short) (rowIndex + 1));
 		}
 		
 		return "";

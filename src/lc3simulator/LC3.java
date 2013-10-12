@@ -23,9 +23,9 @@ public class LC3 {
 	public LC3() {
 		memory = new short[1 << 16];
 		registers = new short[8];
-		registers[0] = -1;
 		pc = 0x3000;
 		ir = 0x0000;
+		memory[0] = (short) 0xBEEF;
 	}
 	
 	public void setMem(short address, short data) {
@@ -67,9 +67,6 @@ public class LC3 {
 		// decode
 		short opcode = Helper.bitSubstrUnsigned(ir, 15, 12);
 		
-		short sr1;
-		short sr2;
-		short sr3;
 		switch (opcode) {
 			case 0x0: // 0000 BR
 				conditionalBranch(
