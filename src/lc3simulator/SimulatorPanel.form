@@ -21,12 +21,12 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="registersLabel" max="32767" attributes="0"/>
-                          <Component id="registerTableScrollPane" pref="376" max="32767" attributes="0"/>
+                          <Component id="registerTableScrollPane" pref="0" max="32767" attributes="0"/>
+                          <Component id="registersLabel" pref="273" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="memoryTableScrollPane" pref="412" max="32767" attributes="0"/>
+                          <Component id="memoryTableScrollPane" pref="515" max="32767" attributes="0"/>
                           <Component id="memoryLabel" max="32767" attributes="0"/>
                       </Group>
                   </Group>

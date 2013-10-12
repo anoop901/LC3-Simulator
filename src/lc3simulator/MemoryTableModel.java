@@ -14,13 +14,9 @@ import javax.swing.table.TableModel;
 public class MemoryTableModel implements TableModel {
 	
 	private LC3 lc3;
-	private Interpretation interp1;
-	private Interpretation interp2;
 	
 	public MemoryTableModel(LC3 lc3) {
 		this.lc3 = lc3;
-		this.interp1 = Interpretation.DECIMAL;
-		this.interp2 = Interpretation.HEXADECIMAL;
 	}
 
 	@Override
@@ -38,11 +34,11 @@ public class MemoryTableModel implements TableModel {
 		if (columnIndex == 0) {
 			return "Address";
 		} else if (columnIndex == 1) {
-			return "Value";
+			return "Bin";
 		} else if (columnIndex == 2) {
-			return "as " + interp1;
+			return "Hex";
 		} else if (columnIndex == 3) {
-			return "as " + interp2;
+			return "Instruction";
 		}
 		return "";
 	}
@@ -64,9 +60,9 @@ public class MemoryTableModel implements TableModel {
 		} else if (columnIndex == 1) {
 			return Helper.shortToBinString(lc3.getMem((short) rowIndex));
 		} else if (columnIndex == 2) {
-			return interp1.interpret(lc3.getMem((short) rowIndex));
+			return Helper.shortToHexString(lc3.getMem((short) rowIndex));
 		} else if (columnIndex == 3) {
-			return interp2.interpret(lc3.getMem((short) rowIndex));
+			return "[instruction]";
 		}
 		
 		return "";
