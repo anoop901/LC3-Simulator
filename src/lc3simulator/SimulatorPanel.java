@@ -49,6 +49,9 @@ public class SimulatorPanel extends javax.swing.JPanel {
 
         memoryTable.setModel(new MemoryTableModel(lc3));
         memoryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        memoryTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+        memoryTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+        memoryTable.getColumnModel().getColumn(2).setPreferredWidth(70);
         memoryTableScrollPane.setViewportView(memoryTable);
 
         instructionCycleButton.setText("Instruction Cycle");

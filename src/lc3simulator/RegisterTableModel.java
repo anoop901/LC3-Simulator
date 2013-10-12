@@ -48,7 +48,7 @@ public class RegisterTableModel implements TableModel {
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
+		return rowIndex <= 8 && (columnIndex == 1 || columnIndex == 2);
 	}
 
 	@Override
@@ -101,6 +101,37 @@ public class RegisterTableModel implements TableModel {
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		String in = (String) aValue;
+		System.out.println(in + ", " + rowIndex + ", " + columnIndex);
+		try {
+			if (rowIndex < 8) {
+				if (columnIndex == 1) {
+					if (!in.isEmpty() && in.charAt(0) != 'x')
+						lc3.setReg((short) rowIndex, (short) Integer.parseInt(in, 16));
+					else
+						lc3.setReg((short) rowIndex, (short) Integer.parseInt(in.substring(1), 16));
+				} else if (columnIndex == 2) {
+					if (!in.isEmpty() && in.charAt(0) != '#')
+						lc3.setReg((short) rowIndex, (short) Integer.parseInt(in));
+					else
+						lc3.setReg((short) rowIndex, (short) Integer.parseInt(in.substring(1)));
+				}
+			} else if (rowIndex == 8) {
+				if (columnIndex == 1) {
+					if (!in.isEmpty() && in.charAt(0) != 'x')
+						lc3.setPC((short) Integer.parseInt(in, 16));
+					else
+						lc3.setPC((short) Integer.parseInt(in.substring(1), 16));
+				} else if (columnIndex == 2) {
+					if (!in.isEmpty() && in.charAt(0) != '#')
+						lc3.setPC((short) Integer.parseInt(in));
+					else
+						lc3.setPC((short) Integer.parseInt(in.substring(1)));
+				}
+			}
+		} catch (NumberFormatException nfe) {
+			
+		}
 	}
 
 	@Override

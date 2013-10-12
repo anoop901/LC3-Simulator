@@ -47,6 +47,10 @@ public class LC3 {
 	public short getReg(short reg) {
 		return registers[reg];
 	}
+
+	public void setPC(short pc) {
+		this.pc = pc;
+	}
 	
 	public short getPC() {
 		return pc;

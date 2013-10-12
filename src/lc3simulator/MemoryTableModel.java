@@ -50,7 +50,7 @@ public class MemoryTableModel implements TableModel {
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
+		return columnIndex == 1 || columnIndex == 2;
 	}
 
 	@Override
@@ -70,6 +70,19 @@ public class MemoryTableModel implements TableModel {
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		String in = (String) aValue;
+		try {
+			if (columnIndex == 1)
+				lc3.setMem((short) rowIndex, (short) Integer.parseInt(in, 2));
+			else if (columnIndex == 2) {
+				if (!in.isEmpty() && in.charAt(0) != 'x')
+					lc3.setMem((short) rowIndex, (short) Integer.parseInt(in, 16));
+				else
+					lc3.setMem((short) rowIndex, (short) Integer.parseInt(in.substring(1), 16));
+			}
+		} catch (NumberFormatException nfe) {
+			
+		}
 	}
 
 	@Override
