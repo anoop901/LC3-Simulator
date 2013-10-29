@@ -25,7 +25,7 @@ public class LC3 {
 		registers = new short[8];
 		pc = 0x3000;
 		ir = 0x0000;
-		memory[0] = (short) 0xBEEF;
+		conditionCode = 0;
 	}
 	
 	public void setMem(short address, short data) {

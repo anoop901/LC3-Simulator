@@ -26,18 +26,18 @@ public class MemoryTableModel implements TableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 4;
+		return 5;
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex == 0) {
+		if (columnIndex == 1) {
 			return "Address";
-		} else if (columnIndex == 1) {
-			return "Bin";
 		} else if (columnIndex == 2) {
-			return "Hex";
+			return "Bin";
 		} else if (columnIndex == 3) {
+			return "Hex";
+		} else if (columnIndex == 4) {
 			return "Instruction";
 		}
 		return "";
@@ -50,18 +50,24 @@ public class MemoryTableModel implements TableModel {
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return columnIndex == 1 || columnIndex == 2;
+		return columnIndex == 2 || columnIndex == 3;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (columnIndex == 0) {
-			return Helper.shortToHexString((short) rowIndex);
+			if (lc3.getPC() == rowIndex) {
+				return "PC";
+			} else {
+				return "";
+			}
 		} else if (columnIndex == 1) {
-			return Helper.shortToBinString(lc3.getMem((short) rowIndex));
+			return Helper.shortToHexString((short) rowIndex);
 		} else if (columnIndex == 2) {
-			return Helper.shortToHexString(lc3.getMem((short) rowIndex));
+			return Helper.shortToBinString(lc3.getMem((short) rowIndex));
 		} else if (columnIndex == 3) {
+			return Helper.shortToHexString(lc3.getMem((short) rowIndex));
+		} else if (columnIndex == 4) {
 			return Helper.shortToInstruction(lc3.getMem((short) rowIndex), (short) (rowIndex + 1));
 		}
 		
@@ -72,9 +78,9 @@ public class MemoryTableModel implements TableModel {
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		String in = (String) aValue;
 		try {
-			if (columnIndex == 1)
+			if (columnIndex == 2)
 				lc3.setMem((short) rowIndex, (short) Integer.parseInt(in, 2));
-			else if (columnIndex == 2) {
+			else if (columnIndex == 3) {
 				if (!in.isEmpty() && in.charAt(0) != 'x')
 					lc3.setMem((short) rowIndex, (short) Integer.parseInt(in, 16));
 				else
