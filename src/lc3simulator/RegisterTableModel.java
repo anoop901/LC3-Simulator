@@ -102,7 +102,6 @@ public class RegisterTableModel implements TableModel {
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		String in = (String) aValue;
-		System.out.println(in + ", " + rowIndex + ", " + columnIndex);
 		try {
 			if (rowIndex < 8) {
 				if (columnIndex == 1) {

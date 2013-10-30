@@ -65,83 +65,83 @@ public class LC3 {
 		ir = memory[pc];
 		pc++;
 		// decode
-		short opcode = Helper.bitSubstrUnsigned(ir, 15, 12);
+		short opcode = Helper.zeroExt(ir, 15, 12);
 		
 		switch (opcode) {
 			case 0x0: // 0000 BR
 				conditionalBranch(
-						Helper.bitSubstrUnsigned(ir, 11, 11) == 1,
-						Helper.bitSubstrUnsigned(ir, 10, 10) == 1,
-						Helper.bitSubstrUnsigned(ir, 9, 9) == 1,
-						Helper.bitSubstrSigned(ir, 8, 0));
+						Helper.zeroExt(ir, 11, 11) == 1,
+						Helper.zeroExt(ir, 10, 10) == 1,
+						Helper.zeroExt(ir, 9, 9) == 1,
+						Helper.signExt(ir, 8, 0));
 				break;
 			case 0x1: // 0001 ADD
-				if (Helper.bitSubstrUnsigned(ir, 5, 5) == 0) { // use register
-					addReg(Helper.bitSubstrUnsigned(ir, 11, 9),
-							Helper.bitSubstrUnsigned(ir, 8, 6),
-							Helper.bitSubstrUnsigned(ir, 2, 0));
+				if (Helper.zeroExt(ir, 5, 5) == 0) { // use register
+					addReg(Helper.zeroExt(ir, 11, 9),
+							Helper.zeroExt(ir, 8, 6),
+							Helper.zeroExt(ir, 2, 0));
 				} else { // use immediate
-					addImm(Helper.bitSubstrUnsigned(ir, 11, 9),
-							Helper.bitSubstrUnsigned(ir, 8, 6),
-							Helper.bitSubstrSigned(ir, 4, 0));
+					addImm(Helper.zeroExt(ir, 11, 9),
+							Helper.zeroExt(ir, 8, 6),
+							Helper.signExt(ir, 4, 0));
 				}
 				break;
 			case 0x2: // 0010 LD
-				loadPCRel(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrSigned(ir, 8, 0));
+				loadPCRel(Helper.zeroExt(ir, 11, 9),
+						Helper.signExt(ir, 8, 0));
 				break;
 			case 0x3: // 0011 ST
-				storePCRel(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrSigned(ir, 8, 0));
+				storePCRel(Helper.zeroExt(ir, 11, 9),
+						Helper.signExt(ir, 8, 0));
 				break;
 			case 0x4: // 0100 JSR, JSRR
-				if (Helper.bitSubstrUnsigned(ir, 11, 11) == 0) { // PC relative mode
-					jumpToSubroutinePCRel(Helper.bitSubstrUnsigned(ir, 10, 0));
+				if (Helper.zeroExt(ir, 11, 11) == 0) { // PC relative mode
+					jumpToSubroutinePCRel(Helper.zeroExt(ir, 10, 0));
 				} else { // base mode
-					jumpToSubroutineBase(Helper.bitSubstrUnsigned(ir, 8, 6));
+					jumpToSubroutineBase(Helper.zeroExt(ir, 8, 6));
 				}
 				break;
 			case 0x5: // 0101 AND
-				if (Helper.bitSubstrUnsigned(ir, 5, 5) == 0) { // use register
-					andReg(Helper.bitSubstrUnsigned(ir, 11, 9),
-							Helper.bitSubstrUnsigned(ir, 8, 6),
-							Helper.bitSubstrUnsigned(ir, 2, 0));
+				if (Helper.zeroExt(ir, 5, 5) == 0) { // use register
+					andReg(Helper.zeroExt(ir, 11, 9),
+							Helper.zeroExt(ir, 8, 6),
+							Helper.zeroExt(ir, 2, 0));
 				} else { // use immediate
-					andImm(Helper.bitSubstrUnsigned(ir, 11, 9),
-							Helper.bitSubstrUnsigned(ir, 8, 6),
-							Helper.bitSubstrSigned(ir, 4, 0));
+					andImm(Helper.zeroExt(ir, 11, 9),
+							Helper.zeroExt(ir, 8, 6),
+							Helper.signExt(ir, 4, 0));
 				}
 				break;
 			case 0x6: // 0110 LDR
-				loadBaseOffset(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrUnsigned(ir, 8, 6),
-						Helper.bitSubstrSigned(ir, 5, 0));
+				loadBaseOffset(Helper.zeroExt(ir, 11, 9),
+						Helper.zeroExt(ir, 8, 6),
+						Helper.signExt(ir, 5, 0));
 				break;
 			case 0x7: // 0111 STR
-				storeBaseOffset(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrUnsigned(ir, 8, 6),
-						Helper.bitSubstrSigned(ir, 5, 0));
+				storeBaseOffset(Helper.zeroExt(ir, 11, 9),
+						Helper.zeroExt(ir, 8, 6),
+						Helper.signExt(ir, 5, 0));
 				break;
 			case 0x8: // 1000 RTI
 				break;
 			case 0x9: // 1001 NOT
-				not(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrUnsigned(ir, 8, 6));
+				not(Helper.zeroExt(ir, 11, 9),
+						Helper.zeroExt(ir, 8, 6));
 				break;
 			case 0xA: // 1010 LDI
-				loadIndirect(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrSigned(ir, 8, 0));
+				loadIndirect(Helper.zeroExt(ir, 11, 9),
+						Helper.signExt(ir, 8, 0));
 				break;
 			case 0xB: // 1011 STI
-				storeIndirect(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrSigned(ir, 8, 0));
+				storeIndirect(Helper.zeroExt(ir, 11, 9),
+						Helper.signExt(ir, 8, 0));
 				break;
 			case 0xC: // 1100 JMP, RET
-				jump(Helper.bitSubstrUnsigned(ir, 8, 6));
+				jump(Helper.zeroExt(ir, 8, 6));
 				break;
 			case 0xE: // 1110 LEA
-				loadEffectiveAddress(Helper.bitSubstrUnsigned(ir, 11, 9),
-						Helper.bitSubstrSigned(ir, 8, 0));
+				loadEffectiveAddress(Helper.zeroExt(ir, 11, 9),
+						Helper.signExt(ir, 8, 0));
 				break;
 			case 0xF: // 1111 TRAP
 				break;
@@ -226,7 +226,6 @@ public class LC3 {
 	// CONTROL INSTRUCTIONS
 	
 	public void conditionalBranch(boolean n, boolean z, boolean p, short pcOffset) {
-		System.out.println("BR" + (n ? "n" : "") + (z ? "z" : "") + (n ? "p" : "") + " " + Helper.shortToHexString((short) (pc + pcOffset)));
 		if ((n && conditionCode == N)
 				|| (z && conditionCode == Z)
 				|| (p && conditionCode == P)) {
@@ -259,12 +258,6 @@ public class LC3 {
 			conditionCode = Z;
 		} else {
 			conditionCode = N;
-		}
-	}
-	
-	public void printRegisters() {
-		for (int i = 0; i < 8; i++) {
-			System.out.println("R" + i + "\t" + Helper.shortToHexString(registers[i]));
 		}
 	}
 }

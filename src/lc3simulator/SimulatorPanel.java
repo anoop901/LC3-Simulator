@@ -64,12 +64,12 @@ public class SimulatorPanel extends javax.swing.JPanel {
         memoryTable.setModel(new MemoryTableModel(lc3));
         memoryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         memoryTable.getColumnModel().getColumn(0).setPreferredWidth(10);
-        memoryTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+        memoryTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         memoryTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-        memoryTable.getColumnModel().getColumn(3).setPreferredWidth(70);
+        memoryTable.getColumnModel().getColumn(3).setPreferredWidth(50);
         memoryTableScrollPane.setViewportView(memoryTable);
 
-        instructionCycleButton.setText("Instruction Cycle");
+        instructionCycleButton.setText("Step");
         instructionCycleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 instructionCycleButtonActionPerformed(evt);
@@ -99,11 +99,6 @@ public class SimulatorPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(instructionCycleButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(loadButton)
-                        .add(0, 0, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(registerTableScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .add(registersLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
@@ -115,7 +110,12 @@ public class SimulatorPanel extends javax.swing.JPanel {
                                 .add(jumpField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 99, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(0, 0, Short.MAX_VALUE))
                             .add(memoryTableScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
-                            .add(memoryLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .add(memoryLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(loadButton)
+                            .add(instructionCycleButton))
+                        .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -127,16 +127,17 @@ public class SimulatorPanel extends javax.swing.JPanel {
                     .add(memoryLabel))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(memoryTableScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                    .add(memoryTableScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                     .add(registerTableScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jumpLabel)
                     .add(jumpField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(7, 7, 7)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(instructionCycleButton)
-                    .add(loadButton)))
+                .add(instructionCycleButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(loadButton)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -154,7 +155,6 @@ public class SimulatorPanel extends javax.swing.JPanel {
 				address = Integer.parseInt(in, 16);
 			else
 				address = Integer.parseInt(in.substring(1), 16);
-			System.out.println("x" + Integer.toHexString(address));
 			memoryTable.getSelectionModel().setSelectionInterval(address, address);
 			memoryTable.scrollRectToVisible(new Rectangle(memoryTable.getCellRect(address, 0, true)));
 		} catch (NumberFormatException nfe) {
@@ -174,6 +174,9 @@ public class SimulatorPanel extends javax.swing.JPanel {
 			}
 			try {
 				short addr = in.readShort();
+				memoryTable.getSelectionModel().setSelectionInterval(addr, addr);
+				memoryTable.scrollRectToVisible(new Rectangle(memoryTable.getCellRect(addr, 0, true)));
+				lc3.setPC(addr);
 				while (true) {
 					lc3.setMem(addr, in.readShort());
 					addr++;
