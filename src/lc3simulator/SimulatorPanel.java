@@ -5,6 +5,16 @@
 package lc3simulator;
 
 import java.awt.Rectangle;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -41,6 +51,7 @@ public class SimulatorPanel extends javax.swing.JPanel {
         instructionCycleButton = new javax.swing.JButton();
         jumpLabel = new javax.swing.JLabel();
         jumpField = new javax.swing.JTextField();
+        loadButton = new javax.swing.JButton();
 
         registersLabel.setText("Registers");
 
@@ -73,6 +84,13 @@ public class SimulatorPanel extends javax.swing.JPanel {
             }
         });
 
+        loadButton.setText("Load Program");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,6 +100,8 @@ public class SimulatorPanel extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .add(instructionCycleButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(loadButton)
                         .add(0, 0, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
@@ -114,15 +134,15 @@ public class SimulatorPanel extends javax.swing.JPanel {
                     .add(jumpLabel)
                     .add(jumpField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(7, 7, 7)
-                .add(instructionCycleButton))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(instructionCycleButton)
+                    .add(loadButton)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void instructionCycleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionCycleButtonActionPerformed
         lc3.instructionCycle();
-		//registerTable.validate();
 		registerTable.repaint();
-		//memoryTable.validate();
 		memoryTable.repaint();
     }//GEN-LAST:event_instructionCycleButtonActionPerformed
 
@@ -142,10 +162,35 @@ public class SimulatorPanel extends javax.swing.JPanel {
 		}
     }//GEN-LAST:event_jumpFieldActionPerformed
 
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+		JFileChooser fc = new JFileChooser();
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			DataInputStream in = null;
+			try {
+				in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+			} catch (FileNotFoundException ex) {
+				return;
+			}
+			try {
+				short addr = in.readShort();
+				while (true) {
+					lc3.setMem(addr, in.readShort());
+					addr++;
+				}
+			} catch (EOFException ex) {
+				
+			} catch (IOException ex) {
+				
+			}
+		}
+    }//GEN-LAST:event_loadButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton instructionCycleButton;
     private javax.swing.JTextField jumpField;
     private javax.swing.JLabel jumpLabel;
+    private javax.swing.JButton loadButton;
     private javax.swing.JLabel memoryLabel;
     private javax.swing.JTable memoryTable;
     private javax.swing.JScrollPane memoryTableScrollPane;

@@ -29,15 +29,11 @@ public class LC3 {
 	}
 	
 	public void setMem(short address, short data) {
-		memory[address] = data;
+		memory[address & 0x0000ffff] = data;
 	}
 	
 	public short getMem(short address) {
-		int a = address;
-		if (a < 0) {
-			a += 1 << 16;
-		}
-		return memory[a];
+		return memory[address & 0x0000ffff];
 	}
 	
 	public void setReg(short reg, short data) {
